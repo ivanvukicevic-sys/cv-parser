@@ -53,10 +53,24 @@ module.exports = async function handler(req, res) {
     const body = req.body;
 
     if (!body || !body.cvUrl) {
-      return res.status(400).json({
-        success: false,
-        error: 'Missing required field',
-        details: 'Request body must contain a "cvUrl" field with a valid PDF URL',
+      // Return sample success response so GHL can save/map response fields
+      return res.status(200).json({
+        success: true,
+        cv_score: 0,
+        summary: "Nema CV-a za analizu",
+        score_reason: "CV URL nije dostavljen",
+        analysis: {
+          strengths: "",
+          weaknesses: "",
+          recommendation: "",
+        },
+        cv_text: "",
+        metadata: {
+          contactId: (body && body.contactId) || null,
+          locationId: (body && body.locationId) || null,
+          processingTimeMs: 0,
+          pageCount: 0,
+        },
       });
     }
 
