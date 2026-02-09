@@ -1,4 +1,4 @@
-const { downloadPdf } = require('../lib/pdfDownloader');
+const { downloadFile } = require('../lib/pdfDownloader');
 const { extractText } = require('../lib/pdfParser');
 const { analyzeCv } = require('../lib/openaiAnalyzer');
 
@@ -78,14 +78,14 @@ module.exports = async function handler(req, res) {
 
     console.log(`[CV Parser] Processing request - contactId: ${contactId || 'N/A'}, locationId: ${locationId || 'N/A'}, jobTitle: ${jobTitle || 'N/A'}`);
 
-    // Step 1: Download PDF
-    console.log(`[CV Parser] Downloading PDF from: ${cvUrl.substring(0, 80)}...`);
-    const pdfBuffer = await downloadPdf(cvUrl);
-    console.log(`[CV Parser] PDF downloaded: ${Math.round(pdfBuffer.length / 1024)}KB`);
+    // Step 1: Download file (handles file IDs, full URLs, PDF/DOCX/DOC)
+    console.log(`[CV Parser] Downloading file: ${cvUrl.substring(0, 80)}...`);
+    const { buffer: fileBuffer, fileType } = await downloadFile(cvUrl);
+    console.log(`[CV Parser] File downloaded: ${Math.round(fileBuffer.length / 1024)}KB, type: ${fileType}`);
 
-    // Step 2: Extract text
-    console.log('[CV Parser] Extracting text from PDF...');
-    const { fullText, preview, pageCount } = await extractText(pdfBuffer);
+    // Step 2: Extract text (supports PDF, DOCX, DOC)
+    console.log(`[CV Parser] Extracting text from ${fileType.toUpperCase()}...`);
+    const { fullText, preview, pageCount } = await extractText(fileBuffer, fileType);
     console.log(`[CV Parser] Text extracted: ${fullText.length} chars, ${pageCount} pages`);
 
     // Step 3: Analyze with OpenAI
