@@ -1,0 +1,7 @@
+{
+  "functions": {
+    "api/parse-cv.js": {
+      "maxDuration": 30
+    }
+  }
+}

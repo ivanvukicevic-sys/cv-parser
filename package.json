@@ -1,0 +1,16 @@
+{
+  "name": "cv-parser-api",
+  "version": "1.0.0",
+  "description": "Serverless CV Parser API for GoHighLevel - Downloads PDFs, extracts text, analyzes with OpenAI",
+  "private": true,
+  "scripts": {
+    "dev": "vercel dev",
+    "deploy": "vercel --prod",
+    "test": "node test/test-parse-cv.js"
+  },
+  "dependencies": {
+    "node-fetch": "^2.7.0",
+    "openai": "^4.20.1",
+    "pdf-parse": "^1.1.1"
+  }
+}
