@@ -60,9 +60,9 @@ module.exports = async function handler(req, res) {
       });
     }
 
-    const { cvUrl, contactId, locationId } = body;
+    const { cvUrl, contactId, locationId, jobTitle } = body;
 
-    console.log(`[CV Parser] Processing request - contactId: ${contactId || 'N/A'}, locationId: ${locationId || 'N/A'}`);
+    console.log(`[CV Parser] Processing request - contactId: ${contactId || 'N/A'}, locationId: ${locationId || 'N/A'}, jobTitle: ${jobTitle || 'N/A'}`);
 
     // Step 1: Download PDF
     console.log(`[CV Parser] Downloading PDF from: ${cvUrl.substring(0, 80)}...`);
@@ -75,8 +75,8 @@ module.exports = async function handler(req, res) {
     console.log(`[CV Parser] Text extracted: ${fullText.length} chars, ${pageCount} pages`);
 
     // Step 3: Analyze with OpenAI
-    console.log('[CV Parser] Analyzing CV with OpenAI...');
-    const analysis = await analyzeCv(fullText);
+    console.log(`[CV Parser] Analyzing CV with OpenAI${jobTitle ? ` for position: ${jobTitle}` : ''}...`);
+    const analysis = await analyzeCv(fullText, jobTitle);
     console.log(`[CV Parser] Analysis complete - Score: ${analysis.cv_score}/10`);
 
     const elapsed = Date.now() - startTime;
